@@ -14,12 +14,14 @@ GIT_EMAIL="martincox99@me.com"
 # Function to backup the current `~/.config` directory if it exists
 backup_configs() {
   # Check if it already exists
-  if [ -e "$TARGET_CONFIG_DIR"]; then
+  if [ -e "$TARGET_CONFIG_DIR" ]; then
     # Create the backup directory
     mkdir -p ${BACKUP_CONFIG_DIR}
 
     # If it does exist, move it's contents to the new backup config directory we just created
     mv "$TARGET_CONFIG_DIR"/* "$BACKUP_CONFIG_DIR"
+  else
+    mkdir -p ${TARGET_CONFIG_DIR}
   fi
 }
 

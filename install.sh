@@ -1,21 +1,36 @@
 #!/bin/bash
 
 # DEFINE VARIABLES
-ZSH_CONFIG_DIR="./zsh_config" # Path to zsh configuration files (if applicable)
-CONFIG_DIR="./config_files"   # Path to dotfiles directory
-TARGET_DIR="$HOME"            # Target directory for symlinking dotfiles
+TARGET_DIR="$HOME"                             # Target directory for symlinking dotfiles
+ZSH_CONFIG_DIR="./zsh_config"                  # Path to zsh configuration files (if applicable)
+SRC_CONFIG_DIR="./config_files"                # Path to dotfiles directory
+TARGET_CONFIG_DIR="$TARGET_DIR/.config"        # Path to the target directory to symlink the config files to
+BACKUP_CONFIG_DIR="$TARGET_DIR/.config_backup" # Path to use for the backup of the `$TARGET_CONFIG_DIR`
 
 # git information
 GIT_NAME="Martin Cox"
 GIT_EMAIL="martincox99@me.com"
 
+# Function to backup the current `~/.config` directory if it exists
+backup_configs() {
+  # Check if it already exists
+  if [ -e "$TARGET_CONFIG_DIR"]; then
+    # Create the backup directory
+    mkdir -p ${BACKUP_CONFIG_DIR}
+
+    # If it does exist, move it's contents to the new backup config directory we just created
+    mv "$TARGET_CONFIG_DIR"/* "$BACKUP_CONFIG_DIR"
+  fi
+}
+
 # Function to symlink the dotfiles to $HOME
 symlink_dotfiles() {
-  for file_to_symlink in "$CONFIG_DIR"/*; do
-    ln -s "$file_to_symlink" "$TARGET_DIR/$(basename "$file_to_symlink")"
+  for config_item in "$SRC_CONFIG_DIR"/*; do
+    ln -s "$config_item" "$TARGET_CONFIG_DIR/$(basename "$config_item")"
   done
 }
 
+# Function to assign the git name and email
 git_setup() {
   # Ensure that git is setup with a name and email
   git config --global user.email "$GIT_EMAIL"
@@ -33,28 +48,34 @@ install_homebrew() {
   fi
 }
 
-# Function to initialize and update the oh-my-zsh submodule
-install_ohmyzsh() {
+# Function to initialize and update the oh-my-zsh submodule as well as any other submodules
+initialize_submodules() {
   git submodule init
   git submodule update
+
+  # Now symlink it to the TARGET_DIR
+  ln -s "$ZSH_CONFIG_DIR/.oh-my-zsh" "$TARGET_DIR/.oh-my-zsh"
 }
 
 # Execute the installation steps
 main() {
-  # Step 1: Symlink dotfiles
+  backup_configs || {
+    echo "Failed to create backup of '.config' directory"
+    exit 1
+  }
   symlink_dotfiles || {
     echo "Failed to symlink dotfiles"
     exit 1
   }
-
-  # Step 2: Install Homebrew
+  git_setup || {
+    echo "Failed to setup git with name and email"
+    exit 1
+  }
   install_homebrew || {
     echo "Failed to install Homebrew"
     exit 1
   }
-
-  # Step 3: Install Oh My Zsh
-  install_ohmyzsh || {
+  initialize_submodules || {
     echo "Failed to initialize or update Oh My Zsh"
     exit 1
   }

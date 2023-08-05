@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # DEFINE VARIABLES
+PROJECT_DIR="$HOME/.dotfiles"
 TARGET_DIR="$HOME"                             # Target directory for symlinking dotfiles
-ZSH_CONFIG_DIR="./zsh_config"                  # Path to zsh configuration files (if applicable)
-SRC_CONFIG_DIR="./config_files"                # Path to dotfiles directory
+ZSH_CONFIG_DIR="$PROJECT_DIR/zsh_config"       # Path to zsh configuration files (if applicable)
+SRC_CONFIG_DIR="$PROJECT_DIR/config_files"     # Path to dotfiles directory
 TARGET_CONFIG_DIR="$TARGET_DIR/.config"        # Path to the target directory to symlink the config files to
 BACKUP_CONFIG_DIR="$TARGET_DIR/.config_backup" # Path to use for the backup of the `$TARGET_CONFIG_DIR`
 

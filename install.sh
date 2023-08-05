@@ -43,7 +43,6 @@ git_setup() {
 install_homebrew() {
   if command -v brew >/dev/null 2>&1; then
     echo "Homebrew is already installed"
-    exit 1
   else
     echo "Homebrew not installed yet, running installation now..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

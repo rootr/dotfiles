@@ -56,6 +56,9 @@ initialize_submodules() {
 
   # Now symlink it to the TARGET_DIR
   ln -s "$ZSH_CONFIG_DIR/.oh-my-zsh" "$TARGET_DIR/.oh-my-zsh"
+
+  # Now install / initialize oh-my-zsh
+  bash "./zsh_config/.oh-my-zsh/tools/install.sh"
 }
 
 # Function to install `exa` via homebrew

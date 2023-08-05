@@ -57,6 +57,15 @@ initialize_submodules() {
   ln -s "$ZSH_CONFIG_DIR/.oh-my-zsh" "$TARGET_DIR/.oh-my-zsh"
 }
 
+# Function to install `exa` via homebrew
+install_exa() {
+  # Ensure we have brew installed first
+  if command -v brew >/dev/null 2>&1; then
+    brew install exa
+    echo "Installed exa"
+  fi
+}
+
 # Execute the installation steps
 main() {
   backup_configs || {
@@ -75,8 +84,12 @@ main() {
     echo "Failed to install Homebrew"
     exit 1
   }
+  install_exa || {
+    echo "Failed to install exa"
+    exit 1
+  }
   initialize_submodules || {
-    echo "Failed to initialize or update Oh My Zsh"
+    echo "Failed to initialize or update git submodules"
     exit 1
   }
 }

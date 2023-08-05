@@ -16,20 +16,27 @@ symlink_dotfiles() {
   done
 }
 
-# Function to install Homebrew
-install_homebrew() {
-  command -v brew >/dev/null 2>&1 || {
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  }
-
+git_setup() {
   # Ensure that git is setup with a name and email
   git config --global user.email "$GIT_EMAIL"
   git config --global user.name "$GIT_NAME"
 }
 
-# Function to install oh-my-zsh
+# Function to install Homebrew
+install_homebrew() {
+  if command -v brew >/dev/null 2>&1; then
+    echo "Homebrew is already installed"
+    exit 1
+  else
+    echo "Homebrew not installed yet, running installation now..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+}
+
+# Function to initialize and update the oh-my-zsh submodule
 install_ohmyzsh() {
-  git clone https://github.com/ohmyzsh/ohmyzsh.git "$TARGET_DIR/.oh-my-zsh"
+  git submodule init
+  git submodule update
 }
 
 # Execute the installation steps
@@ -41,18 +48,14 @@ main() {
   }
 
   # Step 2: Install Homebrew
-  if command -v brew >/dev/null 2>&1; then
-    echo "Homebrew is already installed."
-  else
-    install_homebrew || {
-      echo "Failed to install Homebrew"
-      exit 1
-    }
-  fi
+  install_homebrew || {
+    echo "Failed to install Homebrew"
+    exit 1
+  }
 
   # Step 3: Install Oh My Zsh
   install_ohmyzsh || {
-    echo "Failed to install Oh My Zsh"
+    echo "Failed to initialize or update Oh My Zsh"
     exit 1
   }
 }

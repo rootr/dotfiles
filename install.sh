@@ -78,6 +78,12 @@ install_exa() {
 
 # Execute the installation steps
 main() {
+  # Change it to a hidden file so `.dotfiles` instead of `dotfiles`
+  mv "$TARGET_DIR/dotfiles" "$PROJECT_DIR"
+
+  # Change into that directory so the `git` commands will work properly
+  cd "$PROJECT_DIR"
+
   backup_configs || {
     echo "Failed to create backup of '.config' directory"
     exit 1

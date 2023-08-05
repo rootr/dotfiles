@@ -59,15 +59,20 @@ initialize_submodules() {
   ln -s "$ZSH_CONFIG_DIR/.oh-my-zsh" "$TARGET_DIR/.oh-my-zsh"
 
   # Now install / initialize oh-my-zsh
-  bash "./zsh_config/.oh-my-zsh/tools/install.sh"
+  source "$TARGET_CONFIG_DIR/zsh/zshrc"
 }
 
 # Function to install `exa` via homebrew
 install_exa() {
-  # Ensure we have brew installed first
-  if command -v brew >/dev/null 2>&1; then
-    brew install exa
-    echo "Installed exa"
+
+  if command -v exa >/dev/null 2>&1; then
+    echo "Installing 'exa' via 'brew install exa'..."
+
+    # Ensure we have brew installed first
+    if command -v brew >/dev/null 2>&1; then
+      brew install exa
+      echo "Installed exa"
+    fi
   fi
 }
 

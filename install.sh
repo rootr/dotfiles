@@ -108,6 +108,13 @@ main() {
     echo "Failed to initialize or update git submodules"
     exit 1
   }
+
+  # TODO: Initialize oh-my-zsh and change the shell to `zsh`
+  echo "Install complete. Be sure to change the shell to 'zsh' with the below command"
+
+  echo
+  echo "chsh -s /bin/zsh"
+  echo
 }
 
 # Set error handling

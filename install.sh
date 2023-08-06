@@ -5,7 +5,7 @@ PROJECT_DIR="$HOME/.dotfiles"
 TARGET_DIR="$HOME"                             # Target directory for symlinking dotfiles
 ZSH_CONFIG_DIR="$PROJECT_DIR/zsh_config"       # Path to zsh configuration files (if applicable)
 SRC_CONFIG_DIR="$PROJECT_DIR/config_files"     # Path to dotfiles directory
-TARGET_CONFIG_DIR="$TARGET_DIR/.config"        # Path to the target directory to symlink the config files to
+TARGET_CONFIG_DIR="$TARGET_DIR/.config"        # Path to the target dir to symlink the config files to
 BACKUP_CONFIG_DIR="$TARGET_DIR/.config_backup" # Path to use for the backup of the `$TARGET_CONFIG_DIR`
 
 # git information
@@ -31,6 +31,8 @@ symlink_dotfiles() {
   for config_item in "$SRC_CONFIG_DIR"/*; do
     ln -s "$config_item" "$TARGET_CONFIG_DIR/$(basename "$config_item")"
   done
+
+  ln -s "$PROJECT_DIR/zsh/zshrc" "$TARGET_DIR/.zshrc"
 }
 
 # Function to assign the git name and email
@@ -107,13 +109,6 @@ main() {
     echo "Failed to initialize or update git submodules"
     exit 1
   }
-
-  # TODO: Initialize oh-my-zsh and change the shell to `zsh`
-  echo "Install complete. Be sure to change the shell to 'zsh' with the below command"
-
-  echo
-  echo "chsh -s /bin/zsh"
-  echo
 }
 
 # Set error handling

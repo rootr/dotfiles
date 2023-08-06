@@ -64,7 +64,7 @@ initialize_submodules() {
 # Function to install `exa` via homebrew
 install_exa() {
 
-  if command -v exa >/dev/null 2>&1; then
+  if ! command -v exa >/dev/null 2>&1; then
     echo "Installing 'exa' via 'brew install exa'..."
 
     # Ensure we have brew installed first

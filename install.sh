@@ -55,8 +55,7 @@ initialize_submodules() {
   git submodule init
   git submodule update
 
-  # Now symlink it to the TARGET_DIR
-  ln -s "$ZSH_CONFIG_DIR/.oh-my-zsh" "$TARGET_DIR/.oh-my-zsh"
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   # Now install / initialize oh-my-zsh
   source "$TARGET_CONFIG_DIR/zsh/zshrc"
